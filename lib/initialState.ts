@@ -1,0 +1,91 @@
+import type { ScenarioDescriptor, ScenarioState } from "./types";
+
+export const initialState: ScenarioState = {
+  eventId: "national_day_2026",
+  eventName: "National Day 2026",
+  stage: "DURING_EVENT",
+  stageProgress: 0.62,
+  eventClock: "19:42",
+  elapsedLabel: "T+1h 12m",
+  attendance: {
+    current: 18240,
+    capacity: 20000,
+    fillRate: 0.912,
+    arrivalVelocity: 240,
+  },
+  corridors: {
+    A: { load: 0.42, forecast20min: 0.48, divertActive: false },
+    B: { load: 0.35, forecast20min: 0.42, divertActive: false },
+  },
+  parking: { P1: 0.94, P2: 0.68, P3: 0.45, P4: 0.82 },
+  parkingForecast12m: { P4: 0.99, P2: 0.78 },
+  hotspots: [
+    { zone: "gate_A", label: "Gate A", density: 0.42, trend: "STABLE", severity: "LOW" },
+    { zone: "gate_B", label: "Gate B", density: 0.58, trend: "STABLE", severity: "MEDIUM" },
+    { zone: "plaza_central", label: "Plaza Central", density: 0.62, trend: "STABLE", severity: "MEDIUM" },
+  ],
+  psim: { activeIncidents: 2, critical: 0, lastEvent: "minor_lost_child_resolved" },
+  weather: { tempC: 37, condition: "CLEAR", forecast60min: "CLEAR", forecastConfidence: 0.9 },
+  overlays: { rain: false },
+  vip: { active: false },
+  kpi: {
+    incidentResponseSec: 192, // 3m 12s
+    responseDeltaPct: -38,
+    manualCoordSteps: 4.2,
+    manualCoordDeltaPct: -44,
+    proactiveRatio: [58, 42],
+  },
+};
+
+export const scenarios: ScenarioDescriptor[] = [
+  {
+    key: "S01_GATE_B",
+    number: "01",
+    shortTitle: "Gate B Hotspot",
+    longTitle: "Gate B hotspot → reroute to Gate A",
+    ruleId: "EVT-CROWD-001",
+    priority: "HIGH",
+    outcome: "density −0.14 in 5 min",
+    tag: "Reactive · Crowd",
+  },
+  {
+    key: "S02_P4",
+    number: "02",
+    shortTitle: "P4 Saturation Forecast",
+    longTitle: "P4 saturation cascade → pre-emptive redirect to P2",
+    ruleId: "EVT-PARK-002",
+    priority: "MEDIUM",
+    outcome: "P4 peaked at 87%, no queue",
+    tag: "Predictive · Mobility",
+  },
+  {
+    key: "S03_MEDICAL",
+    number: "03",
+    shortTitle: "Medical L3 · Plaza",
+    longTitle: "Medical emergency at Plaza Central → path clearance + alert suppression",
+    ruleId: "EVT-SEC-003",
+    priority: "CRITICAL",
+    outcome: "medics arrive in 3m 50s",
+    tag: "Context Fusion · Security",
+  },
+  {
+    key: "S04_RAIN",
+    number: "04",
+    shortTitle: "Rain Overlay",
+    longTitle: "Sudden rain forecast mid-event → rain overlay activates",
+    ruleId: "EVT-WEATHER-001",
+    priority: "HIGH",
+    outcome: "covered parking fill +22%",
+    tag: "Overlay · Context Switch",
+  },
+  {
+    key: "S05_VIP",
+    number: "05",
+    shortTitle: "VIP Convoy",
+    longTitle: "Unscheduled VIP convoy → VIP lane activation (parallel)",
+    ruleId: "EVT-VIP-001",
+    priority: "HIGH",
+    outcome: "VIP through in 90s, zero regular delay",
+    tag: "Parallel Rules · Priority Override",
+  },
+];

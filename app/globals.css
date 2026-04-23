@@ -2,26 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+html,
+body {
+  background: #0a1014;
+  color: #e8f0f3;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #233543;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2e4859;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-lg bg-bg-panel border border-line/80 shadow-panel;
+  }
+  .card {
+    @apply rounded-md bg-bg-card border border-line/70;
+  }
+  .section-label {
+    @apply text-[10px] font-medium uppercase tracking-[0.14em] text-ink-muted;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line/70 px-2.5 py-0.5 text-[10px] uppercase tracking-[0.12em] text-ink-secondary;
+  }
+  .divider {
+    @apply border-t border-line/70;
+  }
+  .stat-num {
+    @apply font-serif text-2xl text-ink-primary;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-accent text-bg-base px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] hover:bg-accent/90 transition-colors;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-md border border-line text-ink-secondary px-3 py-1.5 text-xs uppercase tracking-[0.12em] hover:text-ink-primary hover:border-ink-muted transition-colors;
+  }
+  .btn-danger-ghost {
+    @apply inline-flex items-center justify-center rounded-md border border-danger/40 text-danger/80 px-3 py-1.5 text-xs uppercase tracking-[0.12em] hover:bg-danger/10 hover:text-danger transition-colors;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .grid-dots {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 22px 22px;
   }
 }
