@@ -8,6 +8,14 @@
 
 ---
 
+## 0 · Product preview
+
+![Diriyah Event Day Operations · Operator Console](./docs/console.png)
+
+*Operator Console at baseline · National Day 2026 · T+1h 12m. Four regions: scenario state (left), flow map + KPIs + scenario launcher (centre), recommendations + audit log (right).*
+
+---
+
 ## 1 · What this is
 
 This is a fully interactive **Operator Console** demo that turns the Pilot A proposal into something a prospect can *see and click through*. Every pixel maps back to a specific section of the business & logic deep-dive PDF:
