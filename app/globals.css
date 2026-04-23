@@ -63,3 +63,22 @@ body {
     background-size: 22px 22px;
   }
 }
+
+/* RTL tweaks for Arabic */
+html[dir="rtl"] body {
+  font-family:
+    "Segoe UI", "Tahoma", "Geeza Pro", "Al Nile", "SF Arabic",
+    ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* Serif display in Arabic — use a serif face that supports Arabic script */
+html[dir="rtl"] .font-serif {
+  font-family: "Amiri", "Noto Naskh Arabic", "Traditional Arabic", "Times New Roman", serif;
+}
+
+/* Numbers should stay LTR even inside RTL blocks */
+html[dir="rtl"] .tabular-nums,
+html[dir="rtl"] .font-mono {
+  direction: ltr;
+  unicode-bidi: embed;
+}

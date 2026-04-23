@@ -52,11 +52,10 @@ const wait = (ms: number) =>
 // ---- Scenario 01 · Gate B Hotspot -------------------------------------------
 
 async function runGateB(h: RunnerHandle) {
-  // T+0: crowd density rising
   h.pushAudit(
     mkAudit({
       kind: "SCENARIO",
-      title: "Scenario 01 · Gate B hotspot armed",
+      title: { key: "s01.armed" },
       color: "info",
     })
   );
@@ -82,8 +81,8 @@ async function runGateB(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "RULE_FIRE",
-      title: "EVT-CROWD-001 matched",
-      detail: "hotspots[gate_B].density > 0.80",
+      title: { key: "s01.match" },
+      detail: { key: "s01.match.detail" },
       ruleId: "EVT-CROWD-001",
       color: "warn",
     })
@@ -93,23 +92,23 @@ async function runGateB(h: RunnerHandle) {
 
   const rec = mkRec({
     ruleId: "EVT-CROWD-001",
-    title: "Reroute to Gate A",
+    title: { key: "s01.rec.title" },
     zone: "gate_B",
     priority: "HIGH",
-    headline: "Gate B Hotspot",
-    subtitle: "Redistribute arriving visitors to Gate A",
-    affectedVisitors: "~2,000 visitors",
-    expectedImpact: "Expected density drop: 0.15",
-    channels: ["VMS (3 boards)", "App Push", "PSIM L2"],
+    headline: { key: "s01.rec.headline" },
+    subtitle: { key: "s01.rec.subtitle" },
+    affectedVisitors: { key: "s01.rec.affects" },
+    expectedImpact: { key: "s01.rec.impact" },
+    channels: { key: "s01.rec.channels" },
     confidence: 0.85,
     etaToEffect: "3–5 min",
     appearance: "STANDARD",
     actions: [
-      { channel: "VMS", target: "VMS-B1 / B2 / B3", summary: "Push reroute_to_gate_a content" },
-      { channel: "APP_PUSH", target: "users_near_gate_b", summary: "Template crowd_divert_gentle" },
-      { channel: "PSIM_NOTIFY", target: "L2 duty", summary: "gate_b_crowd_divert_active" },
+      { channel: "VMS", target: "VMS-B1 / B2 / B3", summary: { key: "s01.action.vms" } },
+      { channel: "APP_PUSH", target: "users_near_gate_b", summary: { key: "s01.action.app" } },
+      { channel: "PSIM_NOTIFY", target: "L2 duty", summary: { key: "s01.action.psim" } },
     ],
-    rollbackText: "Auto-rollback when gate_B.density < 0.55",
+    rollbackText: { key: "s01.rec.rollback" },
   });
   h.pushRec(rec);
 }
@@ -120,7 +119,7 @@ async function runP4(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "SCENARIO",
-      title: "Scenario 02 · P4 forecast watch",
+      title: { key: "s02.armed" },
       color: "info",
     })
   );
@@ -135,8 +134,8 @@ async function runP4(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "RULE_FIRE",
-      title: "EVT-PARK-002 matched",
-      detail: "forecast(P4,12m) ≥ 0.95 AND P2.forecast < 0.85",
+      title: { key: "s02.match" },
+      detail: { key: "s02.match.detail" },
       ruleId: "EVT-PARK-002",
       color: "warn",
     })
@@ -144,23 +143,23 @@ async function runP4(h: RunnerHandle) {
 
   const rec = mkRec({
     ruleId: "EVT-PARK-002",
-    title: "Redirect arriving P4-bound vehicles to P2",
+    title: { key: "s02.rec.title" },
     zone: "P4",
     priority: "MEDIUM",
-    headline: "P4 Saturation Forecast",
-    subtitle: "Pre-emptive redirect — 12 min ahead of saturation",
-    affectedVisitors: "~50 vehicles (from app destination data)",
-    expectedImpact: "Avoid a 25-min queue on entry road",
-    tradeoff: "+80m average walk to destination",
-    channels: ["VMS-PARK-ENTRY", "App Push (targeted)"],
+    headline: { key: "s02.rec.headline" },
+    subtitle: { key: "s02.rec.subtitle" },
+    affectedVisitors: { key: "s02.rec.affects" },
+    expectedImpact: { key: "s02.rec.impact" },
+    tradeoff: { key: "s02.rec.tradeoff" },
+    channels: { key: "s02.rec.channels" },
     confidence: 0.71,
     etaToEffect: "2 min",
     appearance: "STANDARD",
     actions: [
-      { channel: "VMS", target: "VMS-PARK-ENTRY", summary: "P4 full — P2 recommended" },
-      { channel: "APP_PUSH", target: "users_dest_p4", summary: "Suggest re-route to P2" },
+      { channel: "VMS", target: "VMS-PARK-ENTRY", summary: { key: "s02.action.vms" } },
+      { channel: "APP_PUSH", target: "users_dest_p4", summary: { key: "s02.action.app" } },
     ],
-    rollbackText: "Clears when P4.forecast drops below 0.85",
+    rollbackText: { key: "s02.rec.rollback" },
   });
   h.pushRec(rec);
 }
@@ -171,7 +170,7 @@ async function runMedical(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "SCENARIO",
-      title: "Scenario 03 · PSIM L3 medical incoming",
+      title: { key: "s03.armed" },
       color: "danger",
     })
   );
@@ -194,8 +193,8 @@ async function runMedical(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "RULE_FIRE",
-      title: "EVT-SEC-003 matched · CRITICAL",
-      detail: "Fusing PSIM L3 + plaza_central density 0.62",
+      title: { key: "s03.match" },
+      detail: { key: "s03.match.detail" },
       ruleId: "EVT-SEC-003",
       color: "danger",
     })
@@ -204,32 +203,32 @@ async function runMedical(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "SUPPRESS",
-      title: "Suppressing rules ≤ MEDIUM",
-      detail: "Active while L3 medical unresolved",
+      title: { key: "s03.suppress" },
+      detail: { key: "s03.suppress.detail" },
       color: "warn",
     })
   );
 
   const rec = mkRec({
     ruleId: "EVT-SEC-003",
-    title: "Clear medical path + suppress secondary alerts",
+    title: { key: "s03.rec.title" },
     zone: "plaza_central",
     priority: "CRITICAL",
-    headline: "L3 Medical · Plaza Central",
-    subtitle: "Medical team 1 dispatched from Gate A",
-    affectedVisitors: "Path clearance: corridor M2 → Plaza North",
-    expectedImpact: "Expected medical ETA: 4 min (vs 7 min BAU)",
-    channels: ["Access (M2)", "App Push", "VMS", "PSIM L1"],
+    headline: { key: "s03.rec.headline" },
+    subtitle: { key: "s03.rec.subtitle" },
+    affectedVisitors: { key: "s03.rec.affects" },
+    expectedImpact: { key: "s03.rec.impact" },
+    channels: { key: "s03.rec.channels" },
     confidence: 0.92,
     etaToEffect: "< 60 s",
     appearance: "CRITICAL",
     actions: [
-      { channel: "ACCESS", target: "M2 corridor", summary: "Reduce to emergency-only throughput" },
-      { channel: "APP_PUSH", target: "users_along_path", summary: "Please make way for emergency services" },
-      { channel: "VMS", target: "Plaza-N", summary: "Direct pedestrians to alternate exits" },
-      { channel: "PSIM_NOTIFY", target: "L1 + Facility Director", summary: "Escalate + coordinate escort" },
+      { channel: "ACCESS", target: "M2 corridor", summary: { key: "s03.action.access" } },
+      { channel: "APP_PUSH", target: "users_along_path", summary: { key: "s03.action.app" } },
+      { channel: "VMS", target: "Plaza-N", summary: { key: "s03.action.vms" } },
+      { channel: "PSIM_NOTIFY", target: "L1 + Facility Director", summary: { key: "s03.action.psim" } },
     ],
-    rollbackText: "Auto-clears when PSIM L3 marked resolved",
+    rollbackText: { key: "s03.rec.rollback" },
   });
   h.pushRec(rec);
 }
@@ -240,7 +239,7 @@ async function runRain(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "SCENARIO",
-      title: "Scenario 04 · Weather forecast flip",
+      title: { key: "s04.armed" },
       color: "info",
     })
   );
@@ -254,8 +253,8 @@ async function runRain(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "RULE_FIRE",
-      title: "EVT-WEATHER-001 matched · BATCH",
-      detail: "forecast.rain_60min confidence 0.88",
+      title: { key: "s04.match" },
+      detail: { key: "s04.match.detail" },
       ruleId: "EVT-WEATHER-001",
       color: "warn",
     })
@@ -263,22 +262,22 @@ async function runRain(h: RunnerHandle) {
 
   const rec = mkRec({
     ruleId: "EVT-WEATHER-001",
-    title: "Activate rain overlay (batch)",
+    title: { key: "s04.rec.title" },
     priority: "HIGH",
-    headline: "Rain Overlay · 3 coordinated actions",
-    subtitle: "Overlay weights, don't replace rules",
-    affectedVisitors: "All attendees",
-    expectedImpact: "Covered-parking weight +30% · rain-aware messaging · umbrella offer trigger armed",
-    channels: ["Parking (weights)", "VMS (templates)", "App Push (rain)"],
+    headline: { key: "s04.rec.headline" },
+    subtitle: { key: "s04.rec.subtitle" },
+    affectedVisitors: { key: "s04.rec.affects" },
+    expectedImpact: { key: "s04.rec.impact" },
+    channels: { key: "s04.rec.channels" },
     confidence: 0.88,
     etaToEffect: "Immediate",
     appearance: "BATCH",
     actions: [
-      { channel: "ACCESS", target: "Parking weights", summary: "Covered lots preference +30%" },
-      { channel: "VMS", target: "All boards", summary: "Switch to rain-active variants" },
-      { channel: "APP_PUSH", target: "All users", summary: "Rain expected · umbrella stations active" },
+      { channel: "ACCESS", target: "Parking weights", summary: { key: "s04.action.access" } },
+      { channel: "VMS", target: "All boards", summary: { key: "s04.action.vms" } },
+      { channel: "APP_PUSH", target: "All users", summary: { key: "s04.action.app" } },
     ],
-    rollbackText: "Decays 30 min after forecast clears",
+    rollbackText: { key: "s04.rec.rollback" },
   });
   h.pushRec(rec);
 }
@@ -289,7 +288,7 @@ async function runVip(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "SCENARIO",
-      title: "Scenario 05 · ANPR match on extended VIP list",
+      title: { key: "s05.armed" },
       color: "vip",
     })
   );
@@ -303,8 +302,8 @@ async function runVip(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "RULE_FIRE",
-      title: "EVT-VIP-001 matched (parallel)",
-      detail: "Runs alongside active recommendations",
+      title: { key: "s05.match" },
+      detail: { key: "s05.match.detail" },
       ruleId: "EVT-VIP-001",
       color: "vip",
     })
@@ -312,22 +311,22 @@ async function runVip(h: RunnerHandle) {
 
   const rec = mkRec({
     ruleId: "EVT-VIP-001",
-    title: "Open VIP lane · coordinate escort",
+    title: { key: "s05.rec.title" },
     priority: "HIGH",
-    headline: "VIP Convoy · 500m approaching",
-    subtitle: "Plate recognized on extended VIP list",
-    affectedVisitors: "~90 s regular lane pacing −15% (invisible to visitors)",
-    expectedImpact: "Clear VIP passage · regular flow uninterrupted",
-    channels: ["Access (VIP lane)", "PSIM L1", "Gate staff push"],
+    headline: { key: "s05.rec.headline" },
+    subtitle: { key: "s05.rec.subtitle" },
+    affectedVisitors: { key: "s05.rec.affects" },
+    expectedImpact: { key: "s05.rec.impact" },
+    channels: { key: "s05.rec.channels" },
     confidence: 0.96,
     etaToEffect: "< 10 s",
     appearance: "VIP",
     actions: [
-      { channel: "ACCESS", target: "Main entrance", summary: "Open VIP lane · regular pacing −15%" },
-      { channel: "APP_PUSH", target: "Gate staff (internal)", summary: "Brief: escort incoming" },
-      { channel: "PSIM_NOTIFY", target: "L1 · Escort coord.", summary: "Coordinate escort + clearance" },
+      { channel: "ACCESS", target: "Main entrance", summary: { key: "s05.action.access" } },
+      { channel: "APP_PUSH", target: "Gate staff (internal)", summary: { key: "s05.action.app" } },
+      { channel: "PSIM_NOTIFY", target: "L1 · Escort coord.", summary: { key: "s05.action.psim" } },
     ],
-    rollbackText: "Lane closes after convoy clears",
+    rollbackText: { key: "s05.rec.rollback" },
   });
   h.pushRec(rec);
 }
@@ -371,10 +370,9 @@ export function effectsForRule(
   }
 }
 
-// --- Effects animation: updates state over time, arms auto-rollback ----------
+// --- Effects animation -------------------------------------------------------
 
 async function effectsGateB(h: RunnerHandle) {
-  // Gradually drop gate_B density; raise gate_A modestly
   const steps = [0.78, 0.74, 0.7, 0.66, 0.62, 0.58, 0.54];
   for (let i = 0; i < steps.length; i++) {
     if (h.isCancelled()) return;
@@ -410,8 +408,8 @@ async function effectsGateB(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "ROLLBACK",
-      title: "Auto-rollback fired · Gate B back to normal",
-      detail: "gate_B.density crossed below 0.55",
+      title: { key: "s01.rollback" },
+      detail: { key: "s01.rollback.detail" },
       ruleId: "EVT-CROWD-001",
       color: "good",
     })
@@ -446,7 +444,7 @@ async function effectsP4(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "ROLLBACK",
-      title: "P4 stabilised at 82% · overlay released",
+      title: { key: "s02.rollback" },
       ruleId: "EVT-PARK-002",
       color: "good",
     })
@@ -454,7 +452,6 @@ async function effectsP4(h: RunnerHandle) {
 }
 
 async function effectsMedical(h: RunnerHandle) {
-  // Clear the path: plaza density drops, medical team arrives
   const densitySteps = [0.56, 0.48, 0.42, 0.38, 0.34, 0.32];
   for (let i = 0; i < densitySteps.length; i++) {
     if (h.isCancelled()) return;
@@ -471,8 +468,8 @@ async function effectsMedical(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "ROLLBACK",
-      title: "Medical resolved · suppression lifted",
-      detail: "Medics arrived in 3m 50s · rules ≤ MEDIUM re-enabled",
+      title: { key: "s03.rollback" },
+      detail: { key: "s03.rollback.detail" },
       ruleId: "EVT-SEC-003",
       color: "good",
     })
@@ -491,16 +488,15 @@ async function effectsRain(h: RunnerHandle) {
   await wait(400);
   h.setState((s) => ({ ...s, overlays: { ...s.overlays, rain: true } }));
   await wait(900);
-  // rain arrives
   h.setState((s) => ({
     ...s,
     weather: { ...s.weather, condition: "RAINING" },
-    parking: { ...s.parking, P1: 0.98, P3: 0.62 }, // covered lots fill up
+    parking: { ...s.parking, P1: 0.98, P3: 0.62 },
   }));
   h.pushAudit(
     mkAudit({
       kind: "ACTION_ACK",
-      title: "Covered-lot preference engaged · +22% fill",
+      title: { key: "s04.ack.covered" },
       ruleId: "EVT-WEATHER-001",
       color: "info",
     })
@@ -520,7 +516,7 @@ async function effectsVip(h: RunnerHandle) {
   h.pushAudit(
     mkAudit({
       kind: "ROLLBACK",
-      title: "VIP convoy through · regular flow uninterrupted",
+      title: { key: "s05.rollback" },
       ruleId: "EVT-VIP-001",
       color: "vip",
     })
@@ -530,7 +526,5 @@ async function effectsVip(h: RunnerHandle) {
     vip: { active: false },
   }));
 }
-
-// ---- Public audit/rec helpers (used by the runner when operator acts) -------
 
 export { mkAudit, mkRec };

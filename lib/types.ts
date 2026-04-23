@@ -1,5 +1,7 @@
 // Scenario state model — mirrors §04 of the Deep Dive doc.
 
+import type { TText } from "./i18n";
+
 export type Stage = "BEFORE" | "ARRIVAL" | "DURING_EVENT" | "DISPERSAL";
 export type Severity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 export type Priority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
@@ -8,7 +10,7 @@ export type WeatherCondition = "CLEAR" | "RAINING" | "CLOUDY";
 
 export interface Hotspot {
   zone: string;
-  label: string;
+  labelKey: string; // i18n key resolved at display time
   density: number;
   trend: Trend;
   severity: Severity;
@@ -55,8 +57,8 @@ export type ChannelKey = "VMS" | "APP_PUSH" | "ACCESS" | "PSIM_NOTIFY";
 
 export interface ActionSpec {
   channel: ChannelKey;
-  target?: string;
-  summary: string;
+  target?: TText;
+  summary: TText;
   status?: "PENDING" | "FIRING" | "ACK" | "FAILED";
   latencyMs?: number;
 }
@@ -64,15 +66,15 @@ export interface ActionSpec {
 export interface Recommendation {
   id: string;
   ruleId: string;
-  title: string;
+  title: TText;
   zone?: string;
   priority: Priority;
-  headline: string;
-  subtitle?: string;
-  affectedVisitors?: string;
-  expectedImpact?: string;
-  tradeoff?: string;
-  channels: string[];
+  headline: TText;
+  subtitle?: TText;
+  affectedVisitors?: TText;
+  expectedImpact?: TText;
+  tradeoff?: TText;
+  channels: TText; // single label (pre-joined) or i18n key
   confidence: number;
   etaToEffect: string;
   actions: ActionSpec[];
@@ -81,21 +83,21 @@ export interface Recommendation {
   appearance?: "STANDARD" | "CRITICAL" | "VIP" | "BATCH";
   // Effects applied after approval
   onApprove?: (ctx: ScenarioState) => Partial<ScenarioState>;
-  // Rollback trigger description (text)
-  rollbackText?: string;
+  // Rollback trigger description
+  rollbackText?: TText;
   // Optional reason shown post-execution
-  resultNote?: string;
+  resultNote?: TText;
 }
 
 export interface AuditEntry {
   id: string;
   ts: string;
   kind: "DECISION" | "ACTION_ACK" | "ROLLBACK" | "RULE_FIRE" | "SCENARIO" | "SUPPRESS";
-  title: string;
-  detail?: string;
+  title: TText;
+  detail?: TText;
   ruleId?: string;
   reasonCode?: string;
-  operator?: string;
+  operator?: TText;
   color?: "good" | "warn" | "danger" | "info" | "vip";
 }
 
@@ -109,10 +111,10 @@ export type ScenarioKey =
 export interface ScenarioDescriptor {
   key: ScenarioKey;
   number: string; // "01"
-  shortTitle: string;
-  longTitle: string;
+  shortTitleKey: string;
+  longTitleKey: string;
   ruleId: string;
   priority: Priority;
-  outcome: string;
-  tag: string;
+  outcomeKey: string;
+  tagKey: string;
 }

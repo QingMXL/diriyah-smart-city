@@ -2,18 +2,20 @@
 
 import { scenarios } from "@/lib/initialState";
 import { useStore } from "@/lib/store";
+import { useLocale } from "@/lib/locale";
 import clsx from "clsx";
 import { SectionLabel } from "./ui";
 
 export function ScenarioLauncher() {
   const { triggerScenario, store } = useStore();
+  const { t } = useLocale();
 
   return (
     <section className="panel p-5">
       <div className="flex items-center justify-between mb-3">
-        <SectionLabel>Scenario Launcher · Five Stress-Tests</SectionLabel>
+        <SectionLabel>{t("launcher.title")}</SectionLabel>
         <span className="text-[10px] text-ink-muted uppercase tracking-[0.14em]">
-          Click a card → state changes → recommendation appears → approve to execute
+          {t("launcher.hint")}
         </span>
       </div>
 
@@ -39,37 +41,28 @@ export function ScenarioLauncher() {
             <button
               key={sc.key}
               onClick={() => triggerScenario(sc.key)}
-              className={clsx(
-                "card text-left p-3.5 transition-all",
-                tone,
-                "group"
-              )}
+              className={clsx("card text-left p-3.5 transition-all", tone, "group")}
             >
               <div className="flex items-baseline justify-between">
                 <span className="font-serif text-[26px] text-ink-muted group-hover:text-ink-secondary transition-colors">
                   {sc.number}
                 </span>
-                <span
-                  className={clsx(
-                    "text-[10px] uppercase tracking-[0.14em]",
-                    priorityClass
-                  )}
-                >
-                  {sc.priority}
+                <span className={clsx("text-[10px] uppercase tracking-[0.14em]", priorityClass)}>
+                  {t(`priority.${sc.priority}`)}
                 </span>
               </div>
               <h4 className="font-serif text-[13px] mt-1 text-ink-primary leading-snug">
-                {sc.shortTitle}
+                {t(sc.shortTitleKey)}
               </h4>
               <div className="mt-1 text-[10px] uppercase tracking-[0.12em] text-ink-muted">
-                {sc.tag}
+                {t(sc.tagKey)}
               </div>
               <div className="mt-2 text-[11px] text-ink-secondary line-clamp-2">
-                {sc.longTitle}
+                {t(sc.longTitleKey)}
               </div>
               <div className="mt-2 flex items-center justify-between text-[10px]">
                 <span className="text-ink-muted tabular-nums">{sc.ruleId}</span>
-                <span className="text-accent">→ Trigger</span>
+                <span className="text-accent">{t("launcher.trigger")}</span>
               </div>
             </button>
           );
@@ -78,8 +71,8 @@ export function ScenarioLauncher() {
 
       <div className="mt-3 text-[10px] text-ink-muted uppercase tracking-[0.14em]">
         {store.activeScenario
-          ? `Last triggered · ${store.activeScenario}`
-          : "Idle · awaiting scenario"}
+          ? t("launcher.lastTriggered", { key: store.activeScenario })
+          : t("launcher.idle")}
       </div>
     </section>
   );

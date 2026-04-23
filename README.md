@@ -14,6 +14,18 @@
 
 *Operator Console at baseline · National Day 2026 · T+1h 12m. Four regions: scenario state (left), flow map + KPIs + scenario launcher (centre), recommendations + audit log (right).*
 
+### Trilingual UI — English · 简体中文 · العربية (RTL)
+
+The console ships with **three languages**. Arabic switches the whole layout to right-to-left; numbers and timestamps stay left-to-right inside it. Switch from the header (`EN` / `中` / `ع`) or via a deep link like `?lang=zh`.
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="./docs/console-zh.png" alt="简体中文" /><br/><sub><b>简体中文</b></sub></td>
+    <td align="center" width="33%"><img src="./docs/console-ar.png" alt="العربية · RTL" /><br/><sub><b>العربية · RTL</b></sub></td>
+    <td align="center" width="33%"><img src="./docs/console.png" alt="English" /><br/><sub><b>English</b></sub></td>
+  </tr>
+</table>
+
 ---
 
 ## 1 · What this is

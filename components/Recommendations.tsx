@@ -1,22 +1,26 @@
 "use client";
 
 import { useStore } from "@/lib/store";
+import { useLocale } from "@/lib/locale";
 import clsx from "clsx";
 import { SectionLabel } from "./ui";
 import type { Recommendation } from "@/lib/types";
 
 export function Recommendations() {
   const { store } = useStore();
+  const { t } = useLocale();
   const recs = store.recommendations;
   const active = recs.filter((r) => r.status === "PENDING" || r.status === "FIRING").length;
 
   return (
     <aside className="panel p-5 flex flex-col h-full overflow-hidden">
       <div className="flex items-center justify-between mb-3">
-        <SectionLabel>Recommendations · {active}</SectionLabel>
+        <SectionLabel>
+          {t("rec.title")} · {active}
+        </SectionLabel>
         {store.suppression && (
           <span className="chip !text-danger !border-danger/40 animate-pulse">
-            Suppression active
+            {t("rec.suppression")}
           </span>
         )}
       </div>
@@ -24,10 +28,8 @@ export function Recommendations() {
       <div className="flex-1 overflow-y-auto pr-1 space-y-3">
         {recs.length === 0 && (
           <div className="text-sm text-ink-muted py-12 text-center">
-            <div className="font-serif text-base">No active recommendations</div>
-            <div className="mt-1 text-[11px]">
-              Trigger a scenario from the launcher below.
-            </div>
+            <div className="font-serif text-base">{t("rec.empty.title")}</div>
+            <div className="mt-1 text-[11px]">{t("rec.empty.sub")}</div>
           </div>
         )}
         {recs.map((rec) => (
@@ -40,6 +42,7 @@ export function Recommendations() {
 
 function RecCard({ rec }: { rec: Recommendation }) {
   const { approve, reject } = useStore();
+  const { t, tx } = useLocale();
 
   const tone =
     rec.appearance === "CRITICAL"
@@ -61,6 +64,8 @@ function RecCard({ rec }: { rec: Recommendation }) {
       ? "text-accent"
       : "text-info";
 
+  const rollbackText = rec.rollbackText ? tx(rec.rollbackText) : "";
+
   return (
     <article
       className={clsx(
@@ -72,15 +77,15 @@ function RecCard({ rec }: { rec: Recommendation }) {
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1">
           <div className={clsx("text-[10px] uppercase tracking-[0.14em] flex items-center gap-2", priorityClass)}>
-            <span>{rec.priority}</span>
+            <span>{t(`priority.${rec.priority}`)}</span>
             <span className="text-ink-muted">·</span>
-            <span className="text-ink-secondary">{rec.headline}</span>
+            <span className="text-ink-secondary">{tx(rec.headline)}</span>
           </div>
           <h3 className="font-serif text-[15px] mt-0.5 text-ink-primary leading-snug">
-            {rec.title}
+            {tx(rec.title)}
           </h3>
           {rec.subtitle && (
-            <div className="text-[11px] text-ink-secondary mt-0.5">{rec.subtitle}</div>
+            <div className="text-[11px] text-ink-secondary mt-0.5">{tx(rec.subtitle)}</div>
           )}
         </div>
         <span className="text-[10px] text-ink-muted tabular-nums whitespace-nowrap">
@@ -89,23 +94,16 @@ function RecCard({ rec }: { rec: Recommendation }) {
       </div>
 
       <dl className="mt-3 grid grid-cols-1 gap-1 text-[11px]">
-        {rec.affectedVisitors && (
-          <Row label="Affects" value={rec.affectedVisitors} />
-        )}
-        {rec.expectedImpact && (
-          <Row label="Impact" value={rec.expectedImpact} />
-        )}
-        {rec.tradeoff && (
-          <Row label="Trade-off" value={rec.tradeoff} valueClass="text-warn" />
-        )}
-        <Row label="Channels" value={rec.channels.join(" · ")} />
+        {rec.affectedVisitors && <Row label={t("rec.row.affects")} value={tx(rec.affectedVisitors)} />}
+        {rec.expectedImpact && <Row label={t("rec.row.impact")} value={tx(rec.expectedImpact)} />}
+        {rec.tradeoff && <Row label={t("rec.row.tradeoff")} value={tx(rec.tradeoff)} valueClass="text-warn" />}
+        <Row label={t("rec.row.channels")} value={tx(rec.channels)} />
         <Row
-          label="Confidence"
-          value={`${(rec.confidence * 100).toFixed(0)}% · ETA ${rec.etaToEffect}`}
+          label={t("rec.row.confidence")}
+          value={t("rec.confidenceValue", { pct: (rec.confidence * 100).toFixed(0), eta: rec.etaToEffect })}
         />
       </dl>
 
-      {/* Actions list with status */}
       {(rec.status === "FIRING" || rec.status === "EXECUTED" || rec.status === "ROLLED_BACK") && (
         <ul className="mt-3 space-y-1.5 text-[11px]">
           {rec.actions.map((a, i) => (
@@ -114,19 +112,15 @@ function RecCard({ rec }: { rec: Recommendation }) {
                 <span
                   className={clsx(
                     "h-1.5 w-1.5 rounded-full",
-                    a.status === "ACK"
-                      ? "bg-accent"
-                      : a.status === "FAILED"
-                      ? "bg-danger"
-                      : "bg-warn animate-pulse"
+                    a.status === "ACK" ? "bg-accent" : a.status === "FAILED" ? "bg-danger" : "bg-warn animate-pulse"
                   )}
                 />
                 <span className="text-ink-secondary">{a.channel}</span>
                 <span className="text-ink-muted">·</span>
-                <span className="text-ink-muted">{a.target}</span>
+                <span className="text-ink-muted">{a.target ? tx(a.target) : ""}</span>
               </span>
               <span className="text-ink-muted tabular-nums">
-                {a.status === "ACK" ? `ACK ${a.latencyMs}ms` : a.status ?? "pending"}
+                {a.status === "ACK" ? `ACK ${a.latencyMs}ms` : a.status ?? t("rec.actions.pending")}
               </span>
             </li>
           ))}
@@ -137,41 +131,41 @@ function RecCard({ rec }: { rec: Recommendation }) {
         {rec.status === "PENDING" && (
           <>
             <button onClick={() => approve(rec)} className="btn-primary">
-              {rec.appearance === "CRITICAL" ? "Approve · CRITICAL" : "Approve"}
+              {rec.appearance === "CRITICAL" ? t("rec.approveCritical") : t("rec.approve")}
             </button>
             <button className="btn-ghost" disabled>
-              Edit
+              {t("rec.edit")}
             </button>
             {rec.appearance !== "CRITICAL" && (
               <button onClick={() => reject(rec)} className="btn-danger-ghost">
-                Reject
+                {t("rec.reject")}
               </button>
             )}
           </>
         )}
         {rec.status === "FIRING" && (
           <span className="text-[11px] uppercase tracking-[0.16em] text-warn animate-pulse">
-            Fan-out in progress…
+            {t("rec.firing")}
           </span>
         )}
         {rec.status === "EXECUTED" && (
           <span className="text-[11px] uppercase tracking-[0.16em] text-accent">
-            ✓ Executed · rollback armed · {rec.rollbackText}
+            {t("rec.executed", { rollback: rollbackText })}
           </span>
         )}
         {rec.status === "ROLLED_BACK" && (
           <span className="text-[11px] uppercase tracking-[0.16em] text-ink-muted">
-            ↺ Rolled back
+            {t("rec.rolledBack")}
           </span>
         )}
         {rec.status === "REJECTED" && (
           <span className="text-[11px] uppercase tracking-[0.16em] text-ink-muted">
-            ✗ Rejected — feeds rule weight learning
+            {t("rec.rejected")}
           </span>
         )}
         {rec.status === "SUPPRESSED" && (
           <span className="text-[11px] uppercase tracking-[0.16em] text-ink-muted">
-            ⊘ Suppressed by EVT-SEC-003
+            {t("rec.suppressed")}
           </span>
         )}
       </div>

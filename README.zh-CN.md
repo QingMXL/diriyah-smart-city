@@ -14,6 +14,18 @@
 
 *操作员控制台基线状态 · National Day 2026 · T+1h 12m。四个分区：场景状态（左）· 流向图 + KPI + 场景启动器（中）· 推荐卡 + 审计日志（右）。*
 
+### 三语 UI — 简体中文 · English · العربية（RTL）
+
+控制台内置**三种语言**，其中阿拉伯语会让整个布局切换为从右到左（RTL），而数字和时间戳仍保持从左到右。可从顶部 `EN / 中 / ع` 按钮切换，或使用 `?lang=zh` 这样的深链直达。
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="./docs/console-zh.png" alt="简体中文" /><br/><sub><b>简体中文</b></sub></td>
+    <td align="center" width="33%"><img src="./docs/console-ar.png" alt="العربية · RTL" /><br/><sub><b>العربية · RTL</b></sub></td>
+    <td align="center" width="33%"><img src="./docs/console.png" alt="English" /><br/><sub><b>English</b></sub></td>
+  </tr>
+</table>
+
 ---
 
 ## 1 · 这是什么

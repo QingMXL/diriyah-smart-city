@@ -47,7 +47,7 @@ const initial: Store = {
       id: "seed-0",
       ts: "—",
       kind: "SCENARIO",
-      title: "Console live · National Day 2026 · T+1h 12m",
+      title: { key: "seed.consoleLive" },
       color: "info",
     },
   ],
@@ -171,11 +171,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         type: "PUSH_AUDIT",
         entry: mkAudit({
           kind: "DECISION",
-          title: `Approved · ${rec.title}`,
-          detail: `Rule ${rec.ruleId} · priority ${rec.priority}`,
+          title: { key: "decision.approved", params: { title: rec.ruleId } },
+          detail: {
+            key: "decision.detail.rule",
+            params: { rule: rec.ruleId, priority: rec.priority },
+          },
           ruleId: rec.ruleId,
           reasonCode: rec.priority === "CRITICAL" ? "L3_MEDICAL" : "OPERATOR_APPROVED",
-          operator: "ops_lead · Ahmed",
+          operator: { key: "decision.operator" },
           color: rec.appearance === "VIP" ? "vip" : rec.priority === "CRITICAL" ? "danger" : "good",
         }),
       });
@@ -190,12 +193,22 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
             idx: i,
             latencyMs: delay,
           });
+          const action = rec.actions[i];
+          const targetText =
+            action.target === undefined
+              ? ""
+              : typeof action.target === "string"
+              ? action.target
+              : ""; // target text of TText-type is shown in the rec card; skip in audit
           dispatch({
             type: "PUSH_AUDIT",
             entry: mkAudit({
               kind: "ACTION_ACK",
-              title: `ACK · ${rec.actions[i].channel} · ${rec.actions[i].target ?? ""}`,
-              detail: `${delay} ms`,
+              title: {
+                key: "ack.title",
+                params: { channel: action.channel, target: targetText },
+              },
+              detail: { key: "ack.detail", params: { ms: delay } },
               ruleId: rec.ruleId,
               color: "info",
             }),
@@ -223,10 +236,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       type: "PUSH_AUDIT",
       entry: mkAudit({
         kind: "DECISION",
-        title: `Rejected · ${rec.title}`,
+        title: { key: "decision.rejected", params: { title: rec.ruleId } },
         ruleId: rec.ruleId,
         reasonCode: "OPERATOR_REJECT",
-        operator: "ops_lead · Ahmed",
+        operator: { key: "decision.operator" },
         color: "warn",
       }),
     });
