@@ -1,20 +1,21 @@
 # Diriyah · 活动日运营 — 编排控制台
 
-> **场景编排层**（Scenario Orchestration Layer）的实时交互式 Demo —— Pilot A · Event Day Operations。
+> 面向智慧城市活动日运营的「场景编排层」操作员控制台 Demo。
+> An operator-console demo of a **Scenario Orchestration Layer** for smart-city event-day operations.
 >
-> **语言** · [English](./README.md) · **简体中文**
+> **语言** · [English](./README.md) · **简体中文** · [العربية](./README.ar.md)
 
 ![Status](https://img.shields.io/badge/status-demo-3ec1a6) ![Next.js](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6) ![Tailwind](https://img.shields.io/badge/Tailwind-3.4-38bdf8)
 
 ---
 
-## 0 · 产品截图
-
 ![Diriyah 活动日运营 · 操作员控制台](./docs/console.png)
 
-*操作员控制台基线状态 · National Day 2026 · T+1h 12m。四个分区：场景状态（左）· 流向图 + KPI + 场景启动器（中）· 推荐卡 + 审计日志（右）。*
+这是一个完全跑在浏览器里的交互式操作员控制台，演示「场景编排层」如何把多源原始信号——人流密度、停车饱和度、医疗事件、天气、VIP 到访——转化为有优先级的推荐卡、多通道 fan-out 执行与阈值回落时的自动回滚。Demo 围绕 *National Day 2026* 活动基线展开，约 4 分钟内串联 **5 个脚本化压力测试场景**，并以事件溯源方式完整记录审计日志。无后端、无登录、无持久化——为现场演示的稳定性和「90 秒讲清编排价值」而设计。
 
-### 三语 UI — 简体中文 · English · العربية（RTL）
+---
+
+## 1 · 三语 UI — 简体中文 · English · العربية（RTL）
 
 控制台内置**三种语言**，其中阿拉伯语会让整个布局切换为从右到左（RTL），而数字和时间戳仍保持从左到右。可从顶部 `EN / 中 / ع` 按钮切换，或使用 `?lang=zh` 这样的深链直达。
 
@@ -28,9 +29,9 @@
 
 ---
 
-## 1 · 这是什么
+## 2 · 详细说明
 
-这是一个**完整可交互的操作员控制台（Operator Console）Demo**，把 Pilot A 提案变成客户可以**亲眼看、亲手点**的产品。界面每一处都对应到业务与逻辑深度说明 PDF 中的具体章节：
+界面每一处都对应到业务与逻辑深度说明 PDF 中的具体章节：
 
 - 四区运营台布局 —— PDF Figure 2
 - 5 个压力测试场景 —— PDF §10（反应式人流 / 预测式停车 / 医疗上下文融合 / 降雨 Overlay / VIP 并行规则）
@@ -38,11 +39,11 @@
 - 事件溯源审计日志 —— PDF §08
 - KPI 相对 BAU 的实时变化 —— PDF §09
 
-**完全不连后端**。整个 Demo 是一个**脚本化场景播放器**，设计目标是：**上台稳、讲故事清楚、90 秒让客户看懂**编排层的价值。
+**完全不连后端**。整个 Demo 是一个**脚本化场景播放器**，设计目标是上台稳、讲故事清楚。
 
 ---
 
-## 2 · 界面结构
+## 3 · 界面结构
 
 深色运营台风格，对标 PSIM / 指挥中心视觉。
 
@@ -62,7 +63,7 @@
 
 ---
 
-## 3 · 五个场景
+## 4 · 五个场景
 
 每张场景卡片都会触发一条脚本时间线：状态变化 → 规则命中 → 推荐卡浮出 → 操作员点击审批 → 3 通道 fan-out 并回收 ACK → 阈值回落时自动回滚。
 
@@ -76,7 +77,7 @@
 
 ---
 
-## 4 · 技术栈
+## 5 · 技术栈
 
 - **Next.js 14**（App Router）+ **TypeScript 5**
 - **Tailwind CSS 3.4** —— 自定义设计 token，贴合 PDF 配色（深色板 + 青绿色主色 + 金色 VIP）
@@ -108,7 +109,7 @@ lib/
 
 ---
 
-## 5 · 本地运行
+## 6 · 本地运行
 
 需要 **Node 18+**。
 
@@ -129,7 +130,7 @@ npm run start
 
 ---
 
-## 6 · 客户演示推荐路径
+## 7 · 客户演示推荐路径
 
 给客户演示时，下面的顺序最有说服力：
 
@@ -145,7 +146,7 @@ npm run start
 
 ---
 
-## 7 · 这个 Demo **不**是什么
+## 8 · 这个 Demo **不**是什么
 
 为了让故事清楚，刻意保持极简：
 
@@ -158,7 +159,7 @@ npm run start
 
 ---
 
-## 8 · 与提案 PDF 的对照
+## 9 · 与提案 PDF 的对照
 
 | 控制台区域 | 对应 PDF 章节 |
 |---|---|
@@ -174,7 +175,7 @@ npm run start
 
 ---
 
-## 9 · 许可
+## 10 · 许可
 
 仅用于沟通和演示目的，不用于生产环境。
 

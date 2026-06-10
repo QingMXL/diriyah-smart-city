@@ -1,20 +1,21 @@
 # Diriyah · Event Day Operations — Orchestration Console
 
-> A live, interactive demo of the **Scenario Orchestration Layer** for the Diriyah smart city — Pilot A · Event Day Operations.
+> An operator-console demo of a **Scenario Orchestration Layer** for smart-city event-day operations.
+> 面向智慧城市活动日运营的「场景编排层」操作员控制台 Demo。
 >
-> **Language** · **English** · [简体中文](./README.zh-CN.md)
+> **Language** · **English** · [简体中文](./README.zh-CN.md) · [العربية](./README.ar.md)
 
 ![Status](https://img.shields.io/badge/status-demo-3ec1a6) ![Next.js](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6) ![Tailwind](https://img.shields.io/badge/Tailwind-3.4-38bdf8)
 
 ---
 
-## 0 · Product preview
-
 ![Diriyah Event Day Operations · Operator Console](./docs/console.png)
 
-*Operator Console at baseline · National Day 2026 · T+1h 12m. Four regions: scenario state (left), flow map + KPIs + scenario launcher (centre), recommendations + audit log (right).*
+This is a browser-only interactive operator console that shows how a **Scenario Orchestration Layer** turns raw signals — crowd density, parking saturation, medical incidents, weather, VIP arrivals — into prioritized recommendations, multi-channel fan-out with ACKs, and threshold-driven auto-rollback. Built around the *National Day 2026* baseline, the demo runs **five scripted stress-test scenarios** in roughly four minutes, with a full event-sourced audit trail. No backend, no auth, no persistence — designed to be unbreakable on stage and to make the orchestration story legible in ninety seconds.
 
-### Trilingual UI — English · 简体中文 · العربية (RTL)
+---
+
+## 1 · Trilingual UI — English · 简体中文 · العربية (RTL)
 
 The console ships with **three languages**. Arabic switches the whole layout to right-to-left; numbers and timestamps stay left-to-right inside it. Switch from the header (`EN` / `中` / `ع`) or via a deep link like `?lang=zh`.
 
@@ -28,9 +29,9 @@ The console ships with **three languages**. Arabic switches the whole layout to 
 
 ---
 
-## 1 · What this is
+## 2 · What this is in detail
 
-This is a fully interactive **Operator Console** demo that turns the Pilot A proposal into something a prospect can *see and click through*. Every pixel maps back to a specific section of the business & logic deep-dive PDF:
+Every pixel maps back to a specific section of the business & logic deep-dive PDF:
 
 - Four-region operator console — Figure 2 of the PDF
 - Five stress-test scenarios — §10 of the PDF (reactive crowd, predictive parking, medical fusion, rain overlay, VIP parallel rules)
@@ -38,11 +39,11 @@ This is a fully interactive **Operator Console** demo that turns the Pilot A pro
 - Event-sourced audit log — §08
 - Live KPI deltas vs BAU — §09
 
-Nothing calls a real backend. The whole thing is a **scripted scenario player** designed to be rock-solid on stage and to make the orchestration story legible in 90 seconds.
+Nothing calls a real backend. The whole thing is a **scripted scenario player** designed to be rock-solid on stage.
 
 ---
 
-## 2 · Screens
+## 3 · Screens
 
 A clean, dark ops-console aesthetic matching the PSIM / control-room style referenced in the proposal.
 
@@ -62,7 +63,7 @@ A clean, dark ops-console aesthetic matching the PSIM / control-room style refer
 
 ---
 
-## 3 · Five scenarios
+## 4 · Five scenarios
 
 Each scenario card in the launcher triggers a scripted timeline: state mutates → rule matches → recommendation card appears → operator clicks approve → 3-channel fan-out with ACKs → auto-rollback when thresholds clear.
 
@@ -76,7 +77,7 @@ Each scenario card in the launcher triggers a scripted timeline: state mutates �
 
 ---
 
-## 4 · Tech stack
+## 5 · Tech stack
 
 - **Next.js 14** (App Router) + **TypeScript 5**
 - **Tailwind CSS 3.4** — custom token palette mirroring the PDF (dark slate + teal accent + gold VIP)
@@ -108,7 +109,7 @@ lib/
 
 ---
 
-## 5 · Run it locally
+## 6 · Run it locally
 
 Requires **Node 18+**.
 
@@ -129,7 +130,7 @@ That's it. No env vars, no services, no database.
 
 ---
 
-## 6 · Demo script (recommended order)
+## 7 · Demo script (recommended order)
 
 When showing a prospect, the most persuasive sequence is:
 
@@ -145,7 +146,7 @@ Total demo time: **≈ 4 minutes**, all driven from the single console page.
 
 ---
 
-## 7 · What this demo is *not*
+## 8 · What this demo is *not*
 
 Kept deliberately minimal so the story stays legible:
 
@@ -158,7 +159,7 @@ All of this is deliberate. A live demo needs to be unbreakable, fast, and to tel
 
 ---
 
-## 8 · Mapping to the proposal PDF
+## 9 · Mapping to the proposal PDF
 
 | Console area | PDF section |
 |---|---|
@@ -174,7 +175,7 @@ All of this is deliberate. A live demo needs to be unbreakable, fast, and to tel
 
 ---
 
-## 9 · License
+## 10 · License
 
 For discussion and demonstration purposes only. Not for production use.
 
